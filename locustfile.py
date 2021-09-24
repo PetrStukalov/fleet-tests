@@ -24,6 +24,7 @@ class K8sUser(User):
 
         try:
             self.client.deploy()
+            self.client.service()
             self.client.delete()
             request_meta["response"] = "OK"
             request_meta["response_length"] = 2
