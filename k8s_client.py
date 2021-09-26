@@ -45,6 +45,18 @@ class K8sClient:
         finally:
             w.stop()
 
+    def wait_service(self):
+        w = watch.Watch()
+        try:
+            for event in w.stream(func=self.core_v1.list_namespaced_service,
+                                  namespace="default",
+                                  label_selector="app=nginx%s" % self.id,
+                                  timeout_seconds=60):
+                if event["type"] == "ADDED":
+                    return
+        finally:
+            w.stop()
+
     def get_pods(self):
         ret = self.core_v1.list_pod_for_all_namespaces(watch=False)
         for i in ret.items:
@@ -111,6 +123,5 @@ spec:
         dep = yaml.safe_load(txt % (self.id, self.id, self.id, self.id))
         resp = self.core_v1.create_namespaced_service(body=dep, namespace="default")
         print("Service created. status='%s'" % resp.metadata.name)
-        self.deployed = True
-        self.wait_pods("RUNNING", "app=nginx%s" % self.id)
+        self.wait_service()
         print("RUNNING %s" % self.id)
