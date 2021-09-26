@@ -2,6 +2,7 @@
 # locust -f locustfile.py
 from locust import User, task, between
 from locust.clients import HttpSession
+import os
 
 from k8s_client import K8sClient
 import time
@@ -13,7 +14,6 @@ class K8sUser(User):
     def __init__(self, environment):
         super().__init__(environment)
         self.client = K8sClient()
-        print(self.host)
         self.session = HttpSession(
             base_url="http://%s:%s/" % (self.host, self.client.id),
             request_event=self.environment.events.request,

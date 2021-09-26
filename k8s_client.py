@@ -12,11 +12,11 @@ class K8sClient:
     def __init__(self):
         K8sClient.id += 1
         self.id = K8sClient.id
-        config.load_kube_config(r"C:\Users\pstukalo\aws\ansible\roles\k8s_user\keys\config")
+        config.load_kube_config(r"config")
         c = Configuration().get_default_copy()
         c.assert_hostname = False
         # ssh -v -N -L 6443:10.0.0.85:6443 ec2-user@18.195.72.99
-        c.host = "https://localhost:6443"
+        #c.host = "https://localhost:6443"
         Configuration.set_default(c)
         self.core_v1 = core_v1_api.CoreV1Api()
         self.k8s_apps_v1 = client.AppsV1Api()
