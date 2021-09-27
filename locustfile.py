@@ -73,8 +73,7 @@ class K8sUser(User):
         if self.deploy():
             for x in range(1000):
                 self.session.get("/", name="Test")
-            if self.client.deployed:
-                self.delete()
+            self.delete()
 
     def on_stop(self):
         if self.client.deployed:

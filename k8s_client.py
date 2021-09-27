@@ -27,6 +27,7 @@ class K8sClient:
         my_env = os.environ.copy()
         my_env["NO_PROXY"] = "*"
         cmd = "cat <<EOF | kubectl --kubeconfig config %s --wait -f -\n" % command + deploy + "\nEOF"
+        print(cmd)
         p = Popen(cmd, stdout=PIPE, stderr=PIPE, stdin=PIPE, encoding='utf8', env=my_env, shell=True)
         p.stdin.write(deploy)
         p.stdin.write("EOF")
@@ -40,6 +41,7 @@ class K8sClient:
         my_env = os.environ.copy()
         my_env["NO_PROXY"] = "*"
         cmd = "kubectl --kubeconfig config wait --for=condition=available --timeout=60s deployment/nginx-deployment%s -n default" % self.id
+        print(cmd)
         p = Popen(cmd, stdout=PIPE, stderr=PIPE, encoding='utf8', env=my_env, shell=True)
         if p.returncode != 0:
             output = p.stdout.read()
