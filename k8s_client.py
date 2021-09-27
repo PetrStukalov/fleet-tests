@@ -40,7 +40,7 @@ class K8sClient:
         my_env = os.environ.copy()
         my_env["NO_PROXY"] = "*"
         #cmd = "kubectl --kubeconfig config wait --for=condition=available --timeout=60s deployment/nginx-deployment%s -n default" % self.id
-        cmd="kubectl wait --namespace=default --for=condition=ready pod --timeout=60s -l app=nginx%s" % self.id
+        cmd="kubectl --kubeconfig config wait --namespace=default --for=condition=ready pod --timeout=60s -l app=nginx%s" % self.id
         p = Popen(cmd, stdout=PIPE, stderr=PIPE, encoding='utf8', env=my_env, shell=True)
         if p.returncode is not None:
             output = p.stdout.read()
@@ -53,7 +53,7 @@ class K8sClient:
         my_env = os.environ.copy()
         my_env["NO_PROXY"] = "*"
         #cmd = "kubectl --kubeconfig config wait --for=condition=available --timeout=60s deployment/nginx-deployment%s -n default" % self.id
-        cmd="kubectl wait --namespace=default --for=condition=delete pod --timeout=60s -l app=nginx%s" % self.id
+        cmd="kubectl --kubeconfig config wait --namespace=default --for=condition=delete pod --timeout=60s -l app=nginx%s" % self.id
         p = Popen(cmd, stdout=PIPE, stderr=PIPE, encoding='utf8', env=my_env, shell=True)
         if p.returncode is not None:
             output = p.stdout.read()
