@@ -43,6 +43,7 @@ class K8sClient:
         cmd = "kubectl --kubeconfig config wait --for=condition=available --timeout=60s deployment/nginx-deployment%s -n default" % self.id
         print(cmd)
         p = Popen(cmd, stdout=PIPE, stderr=PIPE, encoding='utf8', env=my_env, shell=True)
+        print(p.returncode)
         if p.returncode != 0:
             output = p.stdout.read()
             err = p.stderr.read()
