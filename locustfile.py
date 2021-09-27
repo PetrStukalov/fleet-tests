@@ -34,7 +34,6 @@ class K8sUser(User):
 
         try:
             self.client.deploy()
-            self.client.service()
             request_meta["response"] = "OK"
             request_meta["response_length"] = 2
         except Exception as e:
