@@ -70,12 +70,12 @@ class K8sUser(User):
 
     @task
     def do(self):
-        if self.deploy():
-            for x in range(1000):
-                r = self.session.get("/", name="Test")
-                if r.ok:
-                    break
-            self.delete()
+        self.deploy()
+        for x in range(1000):
+            r = self.session.get("/", name="Test")
+            if r.ok:
+                break
+        self.delete()
 
     def on_stop(self):
         if self.client.deployed:
