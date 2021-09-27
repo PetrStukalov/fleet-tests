@@ -36,10 +36,24 @@ class K8sClient:
         print(output)
         print(err)
 
-    def wait(self):
+    def waitUp(self):
         my_env = os.environ.copy()
         my_env["NO_PROXY"] = "*"
-        cmd = "kubectl --kubeconfig config wait --for=condition=available --timeout=60s deployment/nginx-deployment%s -n default" % self.id
+        #cmd = "kubectl --kubeconfig config wait --for=condition=available --timeout=60s deployment/nginx-deployment%s -n default" % self.id
+        cmd="kubectl wait --namespace=default --for=condition=ready pod --timeout=60s -l app=nginx%s" % self.id
+        p = Popen(cmd, stdout=PIPE, stderr=PIPE, encoding='utf8', env=my_env, shell=True)
+        if p.returncode is not None:
+            output = p.stdout.read()
+            err = p.stderr.read()
+            print(output)
+            print(err)
+            raise Exception(err, output)
+
+    def waitDown(self):
+        my_env = os.environ.copy()
+        my_env["NO_PROXY"] = "*"
+        #cmd = "kubectl --kubeconfig config wait --for=condition=available --timeout=60s deployment/nginx-deployment%s -n default" % self.id
+        cmd="kubectl wait --namespace=default --for=condition=delete pod --timeout=60s -l app=nginx%s" % self.id
         p = Popen(cmd, stdout=PIPE, stderr=PIPE, encoding='utf8', env=my_env, shell=True)
         if p.returncode is not None:
             output = p.stdout.read()
@@ -52,9 +66,10 @@ class K8sClient:
         deploy = self.__read_deploy()
         self.__exec(deploy, "apply")
         self.deployed = True
-        self.wait()
+        self.waitUp()
 
     def delete(self):
         deploy = self.__read_deploy()
         self.__exec(deploy, "delete")
         self.deployed = False
+        self.waitDown()

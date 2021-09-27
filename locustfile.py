@@ -71,7 +71,7 @@ class K8sUser(User):
     @task
     def do(self):
         if self.deploy():
-            for x in range(1000):
+            for x in range(100):
                 self.session.get("/", name="Test")
             self.delete()
 
