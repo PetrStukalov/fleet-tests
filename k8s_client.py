@@ -1,11 +1,6 @@
-from kubernetes import config
-from kubernetes.client import Configuration
-from kubernetes.client.api import core_v1_api
-from kubernetes import client, watch
-import yaml
-import random
 from subprocess import Popen, PIPE
 import os
+import time
 
 
 class K8sClient:
@@ -66,10 +61,12 @@ class K8sClient:
         deploy = self.__read_deploy()
         self.__exec(deploy, "apply")
         self.deployed = True
-        self.waitUp()
+        #self.waitUp()
+        time.sleep(10)
 
     def delete(self):
         deploy = self.__read_deploy()
         self.__exec(deploy, "delete")
         self.deployed = False
-        self.waitDown()
+        #self.waitDown()
+        time.sleep(10)
