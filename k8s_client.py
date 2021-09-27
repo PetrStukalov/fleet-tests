@@ -62,11 +62,11 @@ class K8sClient:
         self.__exec(deploy, "apply")
         self.deployed = True
         #self.waitUp()
-        time.sleep(10)
+        #time.sleep(10)
 
     def delete(self):
         deploy = self.__read_deploy()
         self.__exec(deploy, "delete")
         self.deployed = False
         #self.waitDown()
-        time.sleep(10)
+        #time.sleep(10)
