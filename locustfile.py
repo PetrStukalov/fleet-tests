@@ -15,7 +15,7 @@ class K8sUser(User):
         super().__init__(environment)
         self.client = K8sClient()
         self.session = HttpSession(
-            base_url="http://%s:%s/" % (self.host, self.client.id),
+            base_url="http://%s:%s" % (self.host, self.client.id),
             request_event=self.environment.events.request,
             user=self
         )
