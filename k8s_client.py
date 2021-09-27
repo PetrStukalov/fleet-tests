@@ -44,7 +44,7 @@ class K8sClient:
         print(cmd)
         p = Popen(cmd, stdout=PIPE, stderr=PIPE, encoding='utf8', env=my_env, shell=True)
         print(p.returncode)
-        if p.returncode != 0:
+        if p.returncode is not None:
             output = p.stdout.read()
             err = p.stderr.read()
             print(output)
